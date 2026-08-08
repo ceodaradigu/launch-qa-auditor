@@ -1,0 +1,12 @@
+{
+  "actorOutputSchemaVersion": 1,
+  "title": "Launch QA Auditor output",
+  "description": "Prioritized launch-readiness findings for every audited public page.",
+  "properties": {
+    "results": {
+      "type": "string",
+      "title": "Launch QA results",
+      "template": "{{links.apiDefaultDatasetUrl}}/items"
+    }
+  }
+}

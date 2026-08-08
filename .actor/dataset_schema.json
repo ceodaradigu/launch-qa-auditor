@@ -1,0 +1,38 @@
+{
+  "actorSpecification": 1,
+  "fields": {
+    "type": "object",
+    "properties": {
+      "requestedUrl": { "type": "string" },
+      "finalUrl": { "type": "string" },
+      "auditedAt": { "type": "string", "format": "date-time" },
+      "httpStatus": { "type": "integer" },
+      "responseTimeMs": { "type": "integer" },
+      "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+      "grade": { "type": "string", "enum": ["A", "B", "C", "D", "F"] },
+      "summary": { "type": "object" },
+      "metadata": { "type": "object" },
+      "findings": { "type": "array", "items": { "type": "object" } }
+    },
+    "required": ["requestedUrl", "finalUrl", "auditedAt", "httpStatus", "score", "grade", "summary", "findings"]
+  },
+  "views": {
+    "overview": {
+      "title": "Launch QA results",
+      "transformation": {
+        "fields": ["requestedUrl", "httpStatus", "score", "grade", "summary", "findings"]
+      },
+      "display": {
+        "component": "table",
+        "properties": {
+          "requestedUrl": { "label": "URL", "format": "link" },
+          "httpStatus": { "label": "HTTP" },
+          "score": { "label": "Score" },
+          "grade": { "label": "Grade" },
+          "summary": { "label": "Summary", "format": "object" },
+          "findings": { "label": "Findings", "format": "array" }
+        }
+      }
+    }
+  }
+}

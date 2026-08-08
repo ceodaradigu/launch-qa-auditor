@@ -1,0 +1,27 @@
+{
+  "title": "Launch QA Auditor input",
+  "description": "Submit up to 10 public HTTP(S) pages that you own or are authorized to inspect. The Actor makes one bounded page request per URL; it does not log in, bypass access controls, or scan private networks.",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "urls": {
+      "title": "Public page URLs",
+      "type": "array",
+      "description": "One to ten public HTTP(S) landing pages.",
+      "editor": "stringList",
+      "default": ["https://example.com"],
+      "minItems": 1,
+      "maxItems": 10
+    },
+    "timeoutSeconds": {
+      "title": "Timeout per page",
+      "type": "integer",
+      "description": "Maximum wait for each page, from 5 to 30 seconds.",
+      "default": 15,
+      "minimum": 5,
+      "maximum": 30,
+      "editor": "number"
+    }
+  },
+  "required": ["urls"]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "relaunch-dept-launch-qa-auditor",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Apify Actor that performs a bounded launch-readiness audit of public web pages.",
+  "scripts": {
+    "start": "node src/main.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "apify": "^3.7.0"
+  }
+}
