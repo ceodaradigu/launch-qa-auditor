@@ -1,9 +1,9 @@
 {
   "actorSpecification": 1,
   "name": "launch-qa-auditor",
-  "title": "Launch QA Auditor",
-  "description": "Audit public launch pages for SEO, social-preview, content, accessibility, and delivery mistakes.",
-  "version": "0.1",
+  "title": "Launch QA Acceptance Oracle",
+  "description": "Audit public launch pages and return deterministic acceptance evidence that AI agents can use through MCP.",
+  "version": "0.2",
   "build": {
     "dockerfile": "../Dockerfile"
   },

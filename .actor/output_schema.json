@@ -1,7 +1,7 @@
 {
   "actorOutputSchemaVersion": 1,
-  "title": "Launch QA Auditor output",
-  "description": "Prioritized launch-readiness findings for every audited public page.",
+  "title": "Launch QA Acceptance Oracle output",
+  "description": "Prioritized launch findings plus optional deterministic acceptance criteria and evidence for every audited public page.",
   "properties": {
     "results": {
       "type": "string",
