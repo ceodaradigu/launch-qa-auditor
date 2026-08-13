@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - codex/apify-acceptance-oracle
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Run 33 deterministic tests
+        run: npm test
+
+      - name: Check production JavaScript syntax
+        run: |
+          node --check src/analyze.js
+          node --check src/fetch-public-page.js
+          node --check src/oracle.js
+          node --check src/result.js
+          node --check src/main.js
+
+      - name: Parse Actor schema files
+        run: |
+          node -e "for (const file of ['.actor/input_schema.json','.actor/dataset_schema.json','.actor/output_schema.json']) JSON.parse(require('node:fs').readFileSync(file, 'utf8')); console.log('Parsed 3 Actor schema files.');"
