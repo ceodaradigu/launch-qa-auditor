@@ -11,7 +11,8 @@
       "editor": "stringList",
       "default": ["https://example.com"],
       "minItems": 1,
-      "maxItems": 10
+      "maxItems": 10,
+      "items": { "type": "string" }
     },
     "timeoutSeconds": {
       "title": "Timeout per page",
@@ -21,7 +22,66 @@
       "minimum": 5,
       "maximum": 30,
       "editor": "number"
+    },
+    "acceptance": {
+      "title": "Acceptance policy (optional)",
+      "type": "object",
+      "description": "When supplied, evaluate every page against a deterministic policy and return accepted, criteria, failedCriteria, and evidence for an AI agent.",
+      "editor": "json",
+      "properties": {
+        "minimumScore": {
+          "title": "Minimum score",
+          "type": "integer",
+          "description": "Lowest acceptable launch score from 0 to 100.",
+          "default": 80,
+          "minimum": 0,
+          "maximum": 100,
+          "editor": "number"
+        },
+        "allowedGrades": {
+          "title": "Allowed grades",
+          "type": "array",
+          "description": "Letter grades that the agent may accept.",
+          "editor": "select",
+          "default": ["A", "B"],
+          "uniqueItems": true,
+          "minItems": 1,
+          "items": { "type": "string", "enum": ["A", "B", "C", "D", "F"] }
+        },
+        "maximumFindings": {
+          "title": "Maximum findings by severity",
+          "type": "object",
+          "description": "Optional upper bounds; omitted severities are not evaluated except high, which defaults to zero.",
+          "editor": "json",
+          "additionalProperties": false,
+          "properties": {
+            "high": { "title": "Maximum high findings", "type": "integer", "description": "Largest acceptable number of high-severity findings.", "default": 0, "minimum": 0, "maximum": 1000, "editor": "number" },
+            "medium": { "title": "Maximum medium findings", "type": "integer", "description": "Largest acceptable number of medium-severity findings when supplied.", "minimum": 0, "maximum": 1000, "editor": "number" },
+            "low": { "title": "Maximum low findings", "type": "integer", "description": "Largest acceptable number of low-severity findings when supplied.", "minimum": 0, "maximum": 1000, "editor": "number" },
+            "total": { "title": "Maximum total findings", "type": "integer", "description": "Largest acceptable total finding count when supplied.", "minimum": 0, "maximum": 1000, "editor": "number" }
+          }
+        },
+        "requiredChecks": {
+          "title": "Checks that must pass",
+          "type": "array",
+          "description": "Stable check IDs that must all pass for acceptance.",
+          "editor": "select",
+          "default": [],
+          "uniqueItems": true,
+          "maxItems": 11,
+          "items": {
+            "type": "string",
+            "enum": [
+              "http-success", "title", "description", "viewport", "language",
+              "single-h1", "canonical", "open-graph", "image-alt",
+              "no-placeholder-copy", "no-mixed-content"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
     }
   },
-  "required": ["urls"]
+  "required": ["urls"],
+  "additionalProperties": false
 }

@@ -10,17 +10,97 @@
       "responseTimeMs": { "type": "integer" },
       "score": { "type": "integer", "minimum": 0, "maximum": 100 },
       "grade": { "type": "string", "enum": ["A", "B", "C", "D", "F"] },
-      "summary": { "type": "object" },
+      "summary": {
+        "type": "object",
+        "properties": {
+          "high": { "type": "integer" },
+          "medium": { "type": "integer" },
+          "low": { "type": "integer" },
+          "total": { "type": "integer" }
+        },
+        "required": ["high", "medium", "low", "total"]
+      },
       "metadata": { "type": "object" },
-      "findings": { "type": "array", "items": { "type": "object" } }
+      "findings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "severity": { "type": "string", "enum": ["high", "medium", "low"] },
+            "code": { "type": "string" },
+            "message": { "type": "string" },
+            "evidence": { "type": "string" }
+          },
+          "required": ["severity", "code", "message"]
+        }
+      },
+      "checks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" },
+            "passed": { "type": "boolean" },
+            "actual": { "type": "string" },
+            "evidence": { "type": "string" }
+          },
+          "required": ["id", "passed", "actual", "evidence"]
+        }
+      },
+      "mode": { "type": "string", "enum": ["audit", "acceptance"] },
+      "verdict": { "type": "string", "enum": ["pass", "fail", "error", "not-evaluated"] },
+      "accepted": { "type": "boolean" },
+      "criteria": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" },
+            "operator": { "type": "string" },
+            "expected": { "type": "string" },
+            "actual": { "type": "string" },
+            "passed": { "type": "boolean" },
+            "evidence": { "type": "string" }
+          },
+          "required": ["id", "operator", "expected", "actual", "passed", "evidence"]
+        }
+      },
+      "failedCriteria": { "type": "array", "items": { "type": "string" } },
+      "evidence": {
+        "type": "object",
+        "properties": {
+          "contractVersion": { "type": "string" },
+          "analyzerVersion": { "type": "string" },
+          "requestedUrl": { "type": "string" },
+          "finalUrl": { "type": "string" },
+          "httpStatus": { "type": "integer" },
+          "responseTimeMs": { "type": "integer" },
+          "contentBytes": { "type": "integer" },
+          "contentSha256": { "type": "string" },
+          "redirects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "from": { "type": "string" },
+                "to": { "type": "string" },
+                "status": { "type": "integer" }
+              },
+              "required": ["from", "to", "status"]
+            }
+          },
+          "evaluatedAt": { "type": "string", "format": "date-time" }
+        },
+        "required": ["contractVersion", "analyzerVersion", "requestedUrl", "finalUrl", "httpStatus", "responseTimeMs", "contentBytes", "contentSha256", "redirects", "evaluatedAt"]
+      }
     },
-    "required": ["requestedUrl", "finalUrl", "auditedAt", "httpStatus", "score", "grade", "summary", "findings"]
+    "required": ["requestedUrl", "finalUrl", "auditedAt", "httpStatus", "score", "grade", "summary", "findings", "checks", "mode", "verdict", "criteria", "failedCriteria", "evidence"]
   },
   "views": {
     "overview": {
       "title": "Launch QA results",
       "transformation": {
-        "fields": ["requestedUrl", "httpStatus", "score", "grade", "summary", "findings"]
+        "fields": ["requestedUrl", "httpStatus", "score", "grade", "mode", "verdict", "accepted", "summary", "failedCriteria", "findings"]
       },
       "display": {
         "component": "table",
@@ -29,7 +109,11 @@
           "httpStatus": { "label": "HTTP" },
           "score": { "label": "Score" },
           "grade": { "label": "Grade" },
+          "mode": { "label": "Mode" },
+          "verdict": { "label": "Verdict" },
+          "accepted": { "label": "Accepted" },
           "summary": { "label": "Summary", "format": "object" },
+          "failedCriteria": { "label": "Failed criteria", "format": "array" },
           "findings": { "label": "Findings", "format": "array" }
         }
       }
